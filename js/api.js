@@ -1,4 +1,4 @@
-const API = "http://localhost:8080/api";
+const API = "https://nanamidata-tpinf232.up.railway.app/api";
 
 const ENDPOINTS = {
     auth: `${API}/utilisateurs`,
