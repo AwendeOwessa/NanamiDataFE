@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion — NanamiData</title>
+    <link rel="stylesheet" href="/styles/commun.css">
+    <link rel="stylesheet" href="/styles/inscription-connexion.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-gauche">
+            <img src="/images/logo.jpg" alt="Logo" class="header-logo">
+            <div class="header-brand">
+                <h3><span>Nanami</span>Data</h3>
+                <p>Collecte & Analyse · INF232</p>
+            </div>
+        </div>
+        <div class="header-droite">
+            <p id="heure" class="header-heure"></p>
+        </div>
+    </header>
+
+    <main class="auth-main">
+
+        <div class="auth-gauche">
+            <div class="auth-brand">
+                <h1><span>Nanami</span>Data</h1>
+                <p>Collectez, analysez et visualisez vos données en temps réel.</p>
+            </div>
+            <div class="auth-features">
+                <div class="auth-feature">
+                    <span>📋</span>
+                    <div>
+                        <h4>Formulaires personnalisés</h4>
+                        <p>Créez des formulaires adaptés à vos besoins</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <span>📊</span>
+                    <div>
+                        <h4>Analyse statistique</h4>
+                        <p>Obtenez des statistiques descriptives automatiques</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <span>📈</span>
+                    <div>
+                        <h4>Visualisation</h4>
+                        <p>Graphiques interactifs et tableaux de bord</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-droite">
+            <div class="auth-carte">
+                <div class="auth-titre">
+                    <h2>Connexion</h2>
+                    <p>Ravi de vous revoir !</p>
+                </div>
+
+                <form id="formLogin">
+                    <div class="auth-champ">
+                        <label for="loginEmail">Adresse email</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            <input type="email" id="loginEmail" placeholder="nanami_kaisen@exemple.com" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-champ">
+                        <label for="loginPassword">Mot de passe</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input type="password" id="loginPassword" placeholder="••••••••" required>
+                            <button type="button" class="toggle-mdp" onclick="toggleMdp('loginPassword', this)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.5" width="16" height="16">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-auth" id="btnLogin">
+                        Se connecter
+                    </button>
+
+                    <p id="loginMessage" class="auth-message"></p>
+                </form>
+
+                <div class="auth-liens">
+                    <p>Pas encore inscrit ?
+                        <a href="/page-inscription.html">Créer un compte</a>
+                    </p>
+                    <div class="separateur-auth">ou</div>
+                    <button type="button" class="btn-admin" onclick="connexionAdmin()">Connexion administrateur</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-bas" style="margin-top:0">
+            <p>© 2026 NanamiData · TP INF232 · Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/inscription-connexion.js"></script>
+
+</body>
+
+</html>

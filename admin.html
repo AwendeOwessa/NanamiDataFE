@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration — NanamiData</title>
+    <link rel="stylesheet" href="/styles/commun.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-gauche">
+            <img src="/images/logo.jpg" alt="Logo" class="header-logo">
+            <div class="header-brand">
+                <h3><span>Nanami</span>Data</h3>
+                <p>Administration · INF232</p>
+            </div>
+        </div>
+        <button class="burger" id="burger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-bar" id="navBar">
+            <a href="/index.html" class="nav-lien">Accueil</a>
+            <a href="/formulaire.html" class="nav-lien">Collecte</a>
+            <a href="/collecte_donnees.html" class="nav-lien">Analyse</a>
+            <a href="/donnees.html" class="nav-lien">Données</a>
+            <a href="/admin.html" class="nav-lien active">Admin</a>
+        </nav>
+        <div class="header-droite">
+            <p id="heure" class="header-heure"></p>
+            <div class="header-user" id="headerUser" style="display:none">
+                <span class="admin-badge">ADMIN</span>
+                <span id="userNom">—</span>
+                <button onclick="logout()" class="btn-logout">Déconnexion</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+
+        <div class="admin-header">
+            <div>
+                <h1>Tableau de bord <span>Admin</span></h1>
+                <p>Vue globale de la plateforme NanamiData</p>
+            </div>
+            <button onclick="loadDashboard()" class="btn-actualiser">
+                ↻ Actualiser
+            </button>
+        </div>
+
+        <div class="admin-stats">
+            <div class="stat-carte violet">
+                <div>
+                    <p class="stat-valeur" id="totalUtilisateurs">—</p>
+                    <p class="stat-label">Utilisateurs</p>
+                </div>
+            </div>
+            <div class="stat-carte bleu">
+                <div>
+                    <p class="stat-valeur" id="totalFormulaires">—</p>
+                    <p class="stat-label">Formulaires</p>
+                </div>
+            </div>
+            <div class="stat-carte vert">
+                <div>
+                    <p class="stat-valeur" id="totalReponses">—</p>
+                    <p class="stat-label">Réponses</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-onglets">
+            <button class="onglet actif" onclick="afficherOnglet('utilisateurs', this)">
+                Utilisateurs
+            </button>
+            <button class="onglet" onclick="afficherOnglet('formulaires', this)">
+                Formulaires
+            </button>
+        </div>
+
+        <div id="section-utilisateurs" class="admin-section">
+            <div class="section-header">
+                <h2>Gestion des utilisateurs</h2>
+                <input type="text" id="rechercheUser" placeholder="Rechercher un utilisateur..." oninput="filtrerUtilisateurs(this.value)" class="input-recherche">
+            </div>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Nom d'utilisateur</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableUtilisateurs"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-formulaires" class="admin-section" style="display:none">
+            <div class="section-header">
+                <h2>Gestion des formulaires</h2>
+                <input type="text" id="rechercheForm" placeholder="Rechercher un formulaire..." oninput="filtrerFormulaires(this.value)" class="input-recherche">
+            </div>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Date création</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableFormulaires"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-bas">
+            <p>© 2026 NanamiData · Administration · INF232</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/admin.js"></script>
+
+</body>
+
+</html>

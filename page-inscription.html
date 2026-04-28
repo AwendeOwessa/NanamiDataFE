@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription — NanamiData</title>
+    <link rel="stylesheet" href="/styles/commun.css">
+    <link rel="stylesheet" href="/styles/inscription-connexion.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-gauche">
+            <img src="/images/logo.jpg" alt="Logo" class="header-logo">
+            <div class="header-brand">
+                <h3><span>Nanami</span>Data</h3>
+                <p>Collecte & Analyse · INF232</p>
+            </div>
+        </div>
+        <div class="header-droite">
+            <p id="heure" class="header-heure"></p>
+        </div>
+    </header>
+
+    <main class="auth-main">
+
+        <div class="auth-gauche">
+            <div class="auth-brand">
+                <h1><span>Nanami</span>Data</h1>
+                <p>Rejoignez la plateforme de collecte et d'analyse de données INF232.</p>
+            </div>
+            <div class="auth-features">
+                <div class="auth-feature">
+                    <span>🚀</span>
+                    <div>
+                        <h4>Démarrage rapide</h4>
+                        <p>Créez votre premier formulaire en quelques minutes</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <span>🔒</span>
+                    <div>
+                        <h4>Données sécurisées</h4>
+                        <p>Vos données restent privées et protégées</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <span>🎓</span>
+                    <div>
+                        <h4>Projet académique</h4>
+                        <p>Conçu pour le cours INF232</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-droite">
+            <div class="auth-carte">
+                <div class="auth-titre">
+                    <h2>Créer un compte</h2>
+                    <p>Rejoignez NanamiData dès maintenant</p>
+                </div>
+
+                <form id="formRegister">
+
+                    <div class="auth-champ">
+                        <label for="nom">Nom complet</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <input type="text" id="nom" placeholder="Nanami Aiku" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-champ">
+                        <label for="email">Adresse email</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            <input type="email" id="email" placeholder="nanami_kaisen@exemple.com" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-champ">
+                        <label for="nomUtilisateur">Nom d'utilisateur</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M5.5 20H8m0 0h8m-8 0v-6m8 6v-6m0 0H8m8 0a4 4 0 1 0-8 0"/>
+                            </svg>
+                            <input type="text" id="nomUtilisateur" placeholder="nanami" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-champ">
+                        <label for="password">Mot de passe</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                            <button type="button" class="toggle-mdp" onclick="toggleMdp('password', this)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.5" width="16" height="16">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-auth" id="btnRegister">
+                        Créer mon compte
+                    </button>
+
+                    <p id="registerMessage" class="auth-message"></p>
+                </form>
+
+                <div class="auth-liens">
+                    <p>Déjà inscrit ?
+                        <a href="/page-connexion.html">Se connecter</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-bas" style="margin-top:0">
+            <p>© 2026 NanamiData · TP INF232 · Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/inscription-connexion.js"></script>
+
+</body>
+
+</html>
