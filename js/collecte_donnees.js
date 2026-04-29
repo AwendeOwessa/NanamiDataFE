@@ -1,3 +1,8 @@
+const PAGE_SIZE = 5;
+let pageCourante = 1;
+let tousLesFormulaires = [];
+
+
 async function loadForms() {
     const container = document.getElementById("formulaires");
     if (!container) return;
@@ -23,22 +28,85 @@ async function loadForms() {
 }
 
 
-function createFormCard(form) {
+function afficherPage() {
+    const container = document.getElementById("formulaires");
+    const userId = getUtilisateurId();
 
+    // ← plus de filtre — tous les formulaires sont visibles
+    const total = tousLesFormulaires.length;
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    const debut = (pageCourante - 1) * PAGE_SIZE;
+    const page = tousLesFormulaires.slice(debut, debut + PAGE_SIZE);
+
+    container.innerHTML = "";
+    page.forEach(form => container.appendChild(createFormCard(form, userId)));
+
+    // Pagination
+    let pagination = document.getElementById("pagination");
+    if (!pagination) {
+        pagination = document.createElement("div");
+        pagination.id = "pagination";
+        pagination.className = "pagination";
+        container.parentElement.appendChild(pagination);
+    }
+
+    pagination.innerHTML = "";
+    if (totalPages <= 1) return;
+
+    const btnPrev = document.createElement("button");
+    btnPrev.textContent = "← Précédent";
+    btnPrev.disabled = pageCourante === 1;
+    btnPrev.onclick = () => {
+        pageCourante--;
+        afficherPage();
+    };
+    pagination.appendChild(btnPrev);
+
+    const info = document.createElement("span");
+    info.textContent = `Page ${pageCourante} / ${totalPages}`;
+    pagination.appendChild(info);
+
+    const btnNext = document.createElement("button");
+    btnNext.textContent = "Suivant →";
+    btnNext.disabled = pageCourante === totalPages;
+    btnNext.onclick = () => {
+        pageCourante++;
+        afficherPage();
+    };
+    pagination.appendChild(btnNext);
+}
+
+
+function createFormCard(form, userId) {
     const div = document.createElement("div");
     div.classList.add("form-card");
 
+    const estMien = form.utilisateur && form.utilisateur.id === userId;
+    const auteur = form.utilisateur ?
+        (form.utilisateur.nomUtilisateur || form.utilisateur.nom || "Anonyme") :
+        "Anonyme";
+
     div.innerHTML = `
-        <h2>${form.titre}</h2>
-        <p>${form.description}</p>
+        <div class="form-card-header">
+            <h2>${form.titre}</h2>
+            ${estMien
+                ? '<span class="form-badge-mien">Mon formulaire</span>'
+                : ''}
+        </div>
+
+        <p class="form-description">${form.description || ""}</p>
+
+        <div class="form-auteur-ligne">
+            <span class="form-auteur">${auteur}</span>
+        </div>
 
         <div class="form-actions">
-            <button class="btn-analyser">Analyser les données</button>
+            <button class="btn-analyser">Analyser</button>
         </div>
 
         <div class="form-content">
             <div class="questions"></div>
-            <button class="submit-btn">Envoyer</button>
+            <button class="submit-btn">Envoyer mes réponses</button>
         </div>
     `;
 
@@ -51,9 +119,7 @@ function createFormCard(form) {
     const btn = div.querySelector(".submit-btn");
     const formContent = div.querySelector(".form-content");
 
-    formContent.addEventListener("click", (e) => {
-        e.stopPropagation();
-    });
+    formContent.addEventListener("click", (e) => e.stopPropagation());
 
     btn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -62,9 +128,7 @@ function createFormCard(form) {
 
     div.addEventListener("click", async() => {
         const isActive = div.classList.toggle("active");
-        if (isActive) {
-            await loadQuestions(form.id, div);
-        }
+        if (isActive) await loadQuestions(form.id, div);
     });
 
     return div;
@@ -78,8 +142,6 @@ async function loadQuestions(formId, card) {
         });
         const form = await res.json();
 
-        console.log("Formulaire reçu :", JSON.stringify(form));
-
         const container = card.querySelector(".questions");
         container.innerHTML = "";
 
@@ -88,10 +150,7 @@ async function loadQuestions(formId, card) {
             return;
         }
 
-        form.questions.forEach(q => {
-            console.log("Question :", JSON.stringify(q));
-            container.appendChild(createQuestion(q));
-        });
+        form.questions.forEach(q => container.appendChild(createQuestion(q)));
 
     } catch (e) {
         console.error("Erreur questions", e);
@@ -100,7 +159,6 @@ async function loadQuestions(formId, card) {
 
 
 function createQuestion(q) {
-
     const div = document.createElement("div");
     div.classList.add("question");
     div.dataset.questionId = q.id;
@@ -112,18 +170,17 @@ function createQuestion(q) {
     }
 
     switch (q.type) {
-
         case "TEXTE":
             html += `<input type="text" class="answer" placeholder="Votre réponse...">`;
             break;
 
         case "NOMBRE":
-            html += `<input 
-                        type="number" 
-                        class="answer" 
+            html += `<input
+                        type="number"
+                        class="answer"
                         placeholder="Entrez un nombre"
-                        min="${q.options?.[0] ?? ''}" 
-                        max="${q.options?.[1] ?? ''}"
+                        min="${(q.options && q.options[0]) ? q.options[0] : ''}"
+                        max="${(q.options && q.options[1]) ? q.options[1] : ''}"
                         step="1">`;
             break;
 
@@ -237,90 +294,6 @@ async function submitReponse(formId, card) {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    const container = document.getElementById("formulaires");
-
-    if (container) {
-        loadForms();
-    }
-});
-
-const PAGE_SIZE = 5;
-let pageCourante = 1;
-let tousLesFormulaires = [];
-
-async function loadForms() {
-    const container = document.getElementById("formulaires");
-    if (!container) return;
-
-    try {
-        const res = await fetch(`${API_FORM}/all`, {
-            headers: { "Authorization": "Bearer " + getToken() }
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        tousLesFormulaires = await res.json();
-        pageCourante = 1;
-        afficherPage();
-
-    } catch (e) {
-        console.error("Erreur chargement formulaires", e);
-    }
-}
-
-function afficherPage() {
-    const container = document.getElementById("formulaires");
-    const userId = getUtilisateurId();
-
-    const visibles = tousLesFormulaires.filter(f =>
-        !f.utilisateur || f.utilisateur.id === userId
-    );
-
-    const total = visibles.length;
-    const totalPages = Math.ceil(total / PAGE_SIZE);
-    const debut = (pageCourante - 1) * PAGE_SIZE;
-    const fin = debut + PAGE_SIZE;
-    const page = visibles.slice(debut, fin);
-
-    container.innerHTML = "";
-    page.forEach(form => container.appendChild(createFormCard(form)));
-
-    let pagination = document.getElementById("pagination");
-    if (!pagination) {
-        pagination = document.createElement("div");
-        pagination.id = "pagination";
-        pagination.className = "pagination";
-        container.parentElement.appendChild(pagination);
-    }
-
-    pagination.innerHTML = "";
-
-    if (totalPages <= 1) return;
-
-    const btnPrev = document.createElement("button");
-    btnPrev.textContent = "← Précédent";
-    btnPrev.disabled = pageCourante === 1;
-    btnPrev.onclick = () => {
-        pageCourante--;
-        afficherPage();
-    };
-    pagination.appendChild(btnPrev);
-
-    const info = document.createElement("span");
-    info.textContent = `Page ${pageCourante} / ${totalPages}`;
-    pagination.appendChild(info);
-
-    const btnNext = document.createElement("button");
-    btnNext.textContent = "Suivant →";
-    btnNext.disabled = pageCourante === totalPages;
-    btnNext.onclick = () => {
-        pageCourante++;
-        afficherPage();
-    };
-    pagination.appendChild(btnNext);
-}
-
 function afficherConfirmation(card) {
     const confirmation = document.createElement("div");
     confirmation.className = "confirmation-overlay";
@@ -334,3 +307,9 @@ function afficherConfirmation(card) {
     card.appendChild(confirmation);
     setTimeout(() => confirmation.remove(), 2500);
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("formulaires");
+    if (container) loadForms();
+});
